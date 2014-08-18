@@ -1,0 +1,2 @@
+defmodule Tabs do
+end
