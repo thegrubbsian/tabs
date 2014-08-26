@@ -8,23 +8,14 @@ defmodule Tabs.Mixfile do
      deps: deps]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
   def application do
     [applications: [:logger]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [
+      {:exredis, github: "artemeff/exredis", ref: "0ba9bb528db65cec8d479d05e4fbf3a81eaaf730"},
+      {:timex, "0.12.4"}
+    ]
   end
 end
