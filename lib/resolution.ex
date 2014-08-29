@@ -1,4 +1,4 @@
-defmodule Resolution do
+defmodule Tabs.Resolution do
   use Timex
 
   def serialize(:year, value), do: DateFormat.format!(value, "%Y", :strftime)

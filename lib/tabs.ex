@@ -1,35 +1,74 @@
 defmodule Tabs do
   use Timex
-  use Exredis
+  use Jazz
+  alias Tabs.Resolution
+  alias Tabs.Metrics.Counter
+  alias Tabs.Metrics.Value
 
   def default_resolutions do
     [:year, :month, :day, :hour, :minute, :second]
   end
 
-  def increment(name), do: increment(:all, name, Date.now, default_resolutions)
-  def increment(bucket, name), do: increment(bucket, name, Date.now, default_resolutions)
-  def increment(name, timestamp = %DateTime{}), do: increment(:all, name, timestamp, default_resolutions)
-  def increment(bucket, name, timestamp = %DateTime{}), do: increment(bucket, name, timestamp, default_resolutions)
-  def increment(name, resolutions) when is_list(resolutions), do: increment(:all, name, Date.now, resolutions)
-  def increment(bucket, name, resolutions) when is_list(resolutions), do: increment(bucket, name, Date.now resolutions)
-
-  def increment(bucket, name, timestamp, resolutions) do
-    client = Exredis.start
-    Enum.each(resolutions, fn(unit) ->
-      key = storage_key(bucket, :counter, name, unit, timestamp)
-      start |> query(["INCR", key])
-    end)
+  def increment_counter(name) do
+    Counter.increment(:all, name, Date.now, default_resolutions)
   end
 
-  def record(bucket, name, value, options) do
+  def increment_counter(name, timestamp = %DateTime{}) do
+    Counter.increment(:all, name, timestamp, default_resolutions)
   end
 
-  def stats(bucket, name, unit, starting, ending) do
+  def increment_counter(bucket, name) do
+    Counter.increment(bucket, name, Date.now, default_resolutions)
   end
 
-  def storage_key(bucket, metric_type, name, resolution, timestamp) do
-    formatted_time = Resolution.serialize(resolution, timestamp)
-    "stat:#{bucket}:#{metric_type}:#{name}:#{resolution}:#{formatted_time}"
+  def increment_counter(bucket, name, resolutions) when is_list(resolutions) do
+    Counter.increment(bucket, name, Date.now, resolutions)
+  end
+
+  def increment_counter(bucket, name, timestamp = %DateTime{}) do
+    Counter.increment(bucket, name, timestamp, default_resolutions)
+  end
+
+  def increment_counter(name, resolutions) when is_list(resolutions) do
+    Counter.increment(:all, name, Date.now, resolutions)
+  end
+
+  def record_value(name, value) when is_number(value) do
+    Value.record(:all, name, value, Date.now, default_resolutions)
+  end
+
+  def record_value(name, value, timestamp = %DateTime{}) when is_number(value) do
+    Value.record(:all, name, value, timestamp, default_resolutions)
+  end
+
+  def record_value(name, value, resolutions) when is_list(resolutions) and is_number(value) do
+    Value.record(:all, name, value, Date.now, resolutions)
+  end
+
+  def record_value(name, value, timestamp = %DateTime{}, resolutions) when is_list(resolutions) and is_number(value) do
+    Value.record(:all, name, value, timestamp, default_resolutions)
+  end
+
+  def record_value(bucket, name, value) when is_number(value) do
+    Value.record(bucket, name, value, Date.now, default_resolutions)
+  end
+
+  def record_value(bucket, name, value, timestamp = %DateTime{}) when is_number(value) do
+    Value.record(bucket, name, value, timestamp, default_resolutions)
+  end
+
+  def record_value(bucket, name, value, resolutions) when is_number(value) and is_list(resolutions) do
+    Value.record(bucket, name, value, Date.now, resolutions)
+  end
+
+  def record_value(bucket, name, value, timestamp = %DateTime{}, resolutions) when is_number(value) and is_list(resolutions) do
+    Value.record(bucket, name, value, Date.now, resolutions)
+  end
+
+  def counter_stats(bucket, name, unit, starting, ending) do
+  end
+
+  def value_stats(bucket, name, unit, starting, ending) do
   end
 
 end

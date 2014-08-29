@@ -15,7 +15,8 @@ defmodule Tabs.Mixfile do
   defp deps do
     [
       {:exredis, github: "artemeff/exredis", ref: "0ba9bb528db65cec8d479d05e4fbf3a81eaaf730"},
-      {:timex, "0.12.4"}
+      {:timex, "0.12.4"},
+      {:jazz, "0.2.0"}
     ]
   end
 end
