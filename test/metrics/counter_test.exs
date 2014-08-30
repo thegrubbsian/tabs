@@ -26,10 +26,10 @@ defmodule CounterTest do
     Counter.increment(client, :all, :foo, timestamp, Tabs.default_resolutions)
     assert Exredis.query(client, ["GET", Counter.storage_key(:all, :foo, :minute, timestamp)]) == "1"
 
-    Counter.increment(client, :foo, :bar, timestamp, Tabs.default_resolutions)
+    Counter.increment(client, :all, :foo, timestamp, Tabs.default_resolutions)
     assert Exredis.query(client, ["GET", Counter.storage_key(:all, :foo, :minute, timestamp)]) == "2"
 
-    Counter.increment(client, :foo, :bar, timestamp, Tabs.default_resolutions)
+    Counter.increment(client, :all, :foo, timestamp, Tabs.default_resolutions)
     assert Exredis.query(client, ["GET", Counter.storage_key(:all, :foo, :minute, timestamp)]) == "3"
   end
 

@@ -1,6 +1,7 @@
 defmodule ResolutionTest do
   use ExUnit.Case
   use Timex
+  alias Tabs.Resolution
 
   setup do
     gmt = Date.timezone("GMT")
@@ -33,6 +34,42 @@ defmodule ResolutionTest do
     assert Resolution.normalize(:hour, date) == Date.from({ { date.year, date.month, date.day }, { date.hour, 0, 0} })
     assert Resolution.normalize(:minute, date) == Date.from({ { date.year, date.month, date.day }, { date.hour, date.minute, 0} })
     assert Resolution.normalize(:second, date) == Date.from({ { date.year, date.month, date.day }, { date.hour, date.minute, date.second} })
+  end
+
+  test "range() returns the correct range for days" do
+    t1 = Date.from({ { 2014, 1, 1 }, { 23, 7, 22 } })
+    t2 = Date.from({ { 2014, 1, 4 }, { 3, 19, 58 } })
+    range = Resolution.range(t1, t2, :day)
+    assert range == [
+      Date.from({ { 2014, 1, 1 }, { 0, 0, 0 } }),
+      Date.from({ { 2014, 1, 2 }, { 0, 0, 0 } }),
+      Date.from({ { 2014, 1, 3 }, { 0, 0, 0 } }),
+      Date.from({ { 2014, 1, 4 }, { 0, 0, 0 } })
+    ]
+  end
+
+  test "range() returns the correct range for hours" do
+    t1 = Date.from({ { 2014, 1, 1 }, { 2, 7, 22 } })
+    t2 = Date.from({ { 2014, 1, 1 }, { 5, 19, 58 } })
+    range = Resolution.range(t1, t2, :hour)
+    assert range == [
+      Date.from({ { 2014, 1, 1 }, { 2, 0, 0 } }),
+      Date.from({ { 2014, 1, 1 }, { 3, 0, 0 } }),
+      Date.from({ { 2014, 1, 1 }, { 4, 0, 0 } }),
+      Date.from({ { 2014, 1, 1 }, { 5, 0, 0 } })
+    ]
+  end
+
+  test "range() returns the correct range for minutes" do
+    t1 = Date.from({ { 2014, 1, 1 }, { 1, 7, 22 } })
+    t2 = Date.from({ { 2014, 1, 1 }, { 1, 10, 58 } })
+    range = Resolution.range(t1, t2, :minute)
+    assert range == [
+      Date.from({ { 2014, 1, 1 }, { 1, 7, 0 } }),
+      Date.from({ { 2014, 1, 1 }, { 1, 8, 0 } }),
+      Date.from({ { 2014, 1, 1 }, { 1, 9, 0 } }),
+      Date.from({ { 2014, 1, 1 }, { 1, 10, 0 } })
+    ]
   end
 
 end

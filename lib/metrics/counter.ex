@@ -9,6 +9,9 @@ defmodule Tabs.Metrics.Counter do
     end)
   end
 
+  def stats(client, bucket, name, starting, ending, resolution) do
+  end
+
   def storage_key(bucket, name, resolution, timestamp) do
     formatted_time = Resolution.serialize(resolution, timestamp)
     "stat:#{bucket}:counter:#{name}:#{resolution}:#{formatted_time}"
